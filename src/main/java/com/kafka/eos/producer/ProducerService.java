@@ -1,5 +1,6 @@
 package com.kafka.eos.producer;
 
+import com.kafka.eos.avro.TransactionEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -10,11 +11,13 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ProducerService {
 
-    private final KafkaTemplate<String, String> kafkaTxTemplate;
+    private final KafkaTemplate<String, TransactionEvent> kafkaTxTemplate;
 
-    public void sendEffortMessage(String message) {
-        log.info("Sending message");
-        kafkaTxTemplate.executeInTransaction(tx -> tx.send("dct.effort", message, message));
+    public void sendEffortMessage(TransactionEvent message) {
+        kafkaTxTemplate.executeInTransaction(tx -> tx.send(
+                "tx.event",
+                message.getEventId().toString(),
+                message));
     }
 
 }

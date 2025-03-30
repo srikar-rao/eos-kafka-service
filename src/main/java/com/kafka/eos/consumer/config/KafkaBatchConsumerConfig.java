@@ -12,7 +12,6 @@ import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.kafka.listener.ContainerProperties;
 import org.springframework.kafka.listener.DeadLetterPublishingRecoverer;
 import org.springframework.kafka.listener.DefaultErrorHandler;
 import org.springframework.util.backoff.FixedBackOff;
@@ -76,7 +75,7 @@ public class KafkaBatchConsumerConfig {
                 (record, Exception) -> new TopicPartition(record.topic() + ".batch.dlt", record.partition())
         );
 
-       // Add custom headers to the DLT message
+        // Add custom headers to the DLT message
         recover.setHeadersFunction((consumerRecord, exception) -> {
             Headers headers = new RecordHeaders();
             headers.add("x-reason", exception.getClass().getSimpleName().getBytes(StandardCharsets.UTF_8));

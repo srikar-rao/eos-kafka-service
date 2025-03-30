@@ -1,5 +1,8 @@
 package com.kafka.eos.consumer.config;
 
+import com.kafka.eos.avro.TransactionEvent;
+import io.confluent.kafka.serializers.KafkaAvroDeserializer;
+import io.confluent.kafka.serializers.KafkaAvroDeserializerConfig;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.context.annotation.Bean;
@@ -17,14 +20,20 @@ import java.util.Map;
 @Configuration
 public class KafkaConsumerConfig {
 
-    public ConsumerFactory<String, String> getConfigProps() {
+    public ConsumerFactory<String, TransactionEvent> getConfigProps() {
 
         Map<String, Object> configProps = new HashMap<>();
         configProps.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         configProps.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        configProps.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        configProps.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, KafkaAvroDeserializer.class);
         configProps.put(ConsumerConfig.GROUP_ID_CONFIG, "effort-consumer-group");
         configProps.put(ConsumerConfig.ISOLATION_LEVEL_CONFIG, "read_committed");
+
+        configProps.put("schema.registry.url", "http://localhost:8081");
+        configProps.put("auto.register.schemas", true);
+        configProps.put("use.latest.version", true);
+//        configProps.put("value.deserializer.specific.avro.reader", true);
+        configProps.put(KafkaAvroDeserializerConfig.SPECIFIC_AVRO_READER_CONFIG, Boolean.TRUE);
 
         // 1. POLLING CONTROL
         configProps.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, "1000");
@@ -99,9 +108,9 @@ public class KafkaConsumerConfig {
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, String> concurrentListenerFactory(KafkaTemplate<String, String> kafkaTemplate) {
+    public ConcurrentKafkaListenerContainerFactory<String, TransactionEvent> concurrentListenerFactory(KafkaTemplate<String, String> kafkaTemplate) {
 
-        ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        ConcurrentKafkaListenerContainerFactory<String, TransactionEvent> factory = new ConcurrentKafkaListenerContainerFactory<>();
 
         factory.setConsumerFactory(getConfigProps());
 

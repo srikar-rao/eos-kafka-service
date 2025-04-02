@@ -1,7 +1,7 @@
 {
   "type": "record",
   "name": "TransactionEvent",
-  "namespace": "com.kafka.eos.avro.producer",
+  "namespace": "com.kafka.eos.avro",
   "fields": [
     { "name": "eventId", "type": "string" },
     { "name": "timestamp", "type": "string" },

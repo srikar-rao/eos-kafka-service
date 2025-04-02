@@ -17,13 +17,6 @@ public class EventProcessService {
     @Timed(value = "process.kafka.event")
     public void processEvent(TransactionEvent event){
 
-        int delayMs = Character.getNumericValue(event.getEventId().charAt(0)) * 1000;
-        try {
-            Thread.sleep(delayMs * 1000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-
         if (AppUtil.isPrime(Integer.parseInt(event.get("eventId").toString()))) {
             log.error("Received prime number :: {}", Integer.parseInt(event.getEventId().toString()));
             throw new RuntimeException("Received prime number.");

@@ -31,3 +31,17 @@ Prometheus	    http://localhost:9091
 Grafana	        http://localhost:3000
 Schema Registry	http://localhost:8081
 Kafka Broker	PLAINTEXT_HOST://localhost:9092
+Sonar Server    http://localhost:9000/
+
+
+# Sonar
+mvn clean verify
+
+mvn clean verify sonar:sonar \
+-Dsonar.projectKey=eos-kafka-service \
+-Dsonar.host.url=http://localhost:9000 \
+-Dsonar.login=your_generated_token \
+-Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml \
+-Dsonar.coverage.inclusions=**/service/**/*.java
+
+

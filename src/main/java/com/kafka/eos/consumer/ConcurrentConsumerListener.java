@@ -1,7 +1,9 @@
 package com.kafka.eos.consumer;
 
 import com.kafka.eos.avro.TransactionEvent;
+import com.kafka.eos.service.EventProcessService;
 import com.kafka.eos.util.AppUtil;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.annotation.RetryableTopic;
@@ -11,8 +13,11 @@ import org.springframework.stereotype.Component;
 
 
 @Component
+@RequiredArgsConstructor
 @Slf4j
 public class ConcurrentConsumerListener {
+
+    private final EventProcessService eventProcessService;
 
     @RetryableTopic(
             attempts = "2",
@@ -31,10 +36,12 @@ public class ConcurrentConsumerListener {
     public void consumeSingleRecord(TransactionEvent message,
                                     Acknowledgment acknowledgment) {
 
-        if (AppUtil.isPrime(Integer.parseInt(message.get("eventId").toString()))) {
-            log.error("Received prime number :: {}", Integer.parseInt(message.getEventId().toString()));
-            throw new RuntimeException("Received prime number.");
-        }
+//        if (AppUtil.isPrime(Integer.parseInt(message.get("eventId").toString()))) {
+//            log.error("Received prime number :: {}", Integer.parseInt(message.getEventId().toString()));
+//            throw new RuntimeException("Received prime number.");
+//        }
+
+        eventProcessService.processEvent(message);
 
         acknowledgment.acknowledge();
     }

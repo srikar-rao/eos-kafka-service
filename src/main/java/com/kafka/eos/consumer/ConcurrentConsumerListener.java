@@ -2,7 +2,6 @@ package com.kafka.eos.consumer;
 
 import com.kafka.eos.avro.TransactionEvent;
 import com.kafka.eos.service.EventProcessService;
-import com.kafka.eos.util.AppUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;

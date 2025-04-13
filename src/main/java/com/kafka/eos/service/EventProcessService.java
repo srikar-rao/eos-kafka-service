@@ -3,7 +3,6 @@ package com.kafka.eos.service;
 import com.kafka.eos.avro.TransactionEvent;
 import com.kafka.eos.util.AppUtil;
 import io.micrometer.core.annotation.Timed;
-import io.micrometer.core.instrument.Metrics;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

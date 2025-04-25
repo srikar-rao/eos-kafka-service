@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.annotation.RetryableTopic;
+import org.springframework.kafka.retrytopic.SameIntervalTopicReuseStrategy;
 import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.stereotype.Component;
@@ -19,12 +20,12 @@ public class ConcurrentConsumerListener {
     private final EventProcessService eventProcessService;
 
     @RetryableTopic(
-            attempts = "2",
-//            backoff = @Backoff(delay = 1000, multiplier = 2.0, maxDelay = 10000),
+            attempts = "4", //1 main attempt, 3 retry attempts
             backoff = @Backoff(delay = 500),
             dltTopicSuffix = ".dlt",
             retryTopicSuffix = ".retry",
             autoCreateTopics = "true",
+            sameIntervalTopicReuseStrategy = SameIntervalTopicReuseStrategy.SINGLE_TOPIC,
             kafkaTemplate = "kafkaDLTTemplate"
     )
     @KafkaListener(

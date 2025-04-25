@@ -12,12 +12,14 @@ import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.listener.ContainerProperties;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.util.HashMap;
 import java.util.Map;
 
 //@ConditionalOnProperty(name = "kafka.enabled", havingValue = "true", matchIfMissing = false)
 @Configuration
+@EnableScheduling
 public class KafkaConsumerConfig {
 
     public ConsumerFactory<String, TransactionEvent> getConfigProps() {

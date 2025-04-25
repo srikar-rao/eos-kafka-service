@@ -124,6 +124,8 @@ public class KafkaConsumerConfig {
 
         factory.getContainerProperties().setShutdownTimeout(5000);
 
+        factory.getContainerProperties().setObservationEnabled(true);
+
         // prevent auto start, need to manual start of consuming when application full started.
         factory.setAutoStartup(false);
 

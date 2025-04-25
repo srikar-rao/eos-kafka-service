@@ -76,7 +76,9 @@ public class KafkaProducerConfig {
     // KafkaTemplate with Transactions
     @Bean
     public KafkaTemplate<String, TransactionEvent> kafkaTxTemplate() {
-        return new KafkaTemplate<>(txProducerFactory());
+        KafkaTemplate<String, TransactionEvent> txTemplate = new KafkaTemplate<>(txProducerFactory());
+        txTemplate.setObservationEnabled(Boolean.TRUE);
+        return txTemplate;
     }
 
     //KafkaTemplate without Transactions
